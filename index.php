@@ -20,7 +20,7 @@ function getHTOutputVars() {
     $dquo  = $pqo->getQuota();
     $au    = $pqo->getActualUsage();
     if (!$au) $au = '';
-    $umax  = $dquo * 1000;
+    $umax  = $dquo * 1024;
     $calcs = $pqo->calcs();
     unset($pqo);
 

@@ -10,6 +10,7 @@ window.onload = function() {
 
 var KW_PQUO_TOV = false;
 function delayInput() {
+    if (this.id === 'quota') byid('ausage').max = this.value * 1024;
     if (KW_PQUO_TOV) clearTimeout(KW_PQUO_TOV);
     KW_PQUO_TOV = setTimeout(function() { myOnInput(); }, 600);
 }
