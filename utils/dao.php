@@ -14,11 +14,12 @@ class dao_pquo extends dao_generic {
 	$this->q = ['sid' => $sid];
     }
     
-    public function put($au, $date, $quo, $isnewau) {
+    public function put($au, $date, $quo, $isnewau, $unmu) {
 	$dat           = $this->q;
 	$dat['tday' ]  = $date;
 	$dat['quota']  = $quo;
 	$dat['ausage'] = $au;
+	$dat['unmu']   = $unmu;
 	$dat['agent']  = self::getua();
 	$this->rcoll->upsert($this->q, $dat);
 	

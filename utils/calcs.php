@@ -7,12 +7,14 @@ require_once('dao.php');
 class pquo {
 
     const defaultTDay  = 7;
-    const defaultQuota = 2;
+    const defaultQuota = 15;
     
     public function __construct($turnday = false, $quo = false, $time = false) {
 	$this->turnday = $turnday ? $turnday : $this->getVal('turnday');
 	$this->quo     = $quo     ? $quo     : $this->getVal('quota');
 	$this->now     = $time ? $time : time();
+	$this->unmu    = $this->getVal('unmu');
+	return;
     }
     
     private function getVal($pn) {
@@ -28,7 +30,7 @@ class pquo {
 		$ts = strtotime($pv);
 		if (!$ts) die('bad date');
 		return intval(date('d', $ts));
-	    }
+	    } else if ($pn === 'unmu') return intval($pv);
 	}
 	
 	if (!isset($this->dao)) $this->dao = new dao_pquo();
@@ -38,11 +40,13 @@ class pquo {
 	if ($this->dbdat) {
 	    if ($pn === 'quota')   return $this->dbdat['quota'];
 	    if ($pn === 'turnday') return $this->dbdat['tday'];
+	    if ($pn === 'unmu')    return isset($this->dbdat['unmu']) ? $this->dbdat['unmu'] : '';
 	    kwas(0, 'should not be here in dao getVal()');
 	}
 	
 	if ($pn === 'turnday') return self::defaultTDay;
 	if ($pn === 'quota')   return self::defaultQuota;
+	if ($pn === 'unmu' )   return '';
 	kwas(0, 'should not be here at the end of getVal() dao');
     }
     
@@ -74,6 +78,8 @@ class pquo {
 	$res = $this->getRange();
 	return $res['ns'];
     }
+    
+    public function getUnmu() { return $this->unmu; }
     
     public function getQuota() { return $this->quo;     }
     
@@ -185,7 +191,7 @@ class pquo {
     
     private function save($au, $isnew) {
 	$dao = new dao_pquo();
-	$dao->put($au, $this->turnday, $this->quo, $isnew);
+	$dao->put($au, $this->turnday, $this->quo, $isnew, $this->unmu);
     }
 }
   

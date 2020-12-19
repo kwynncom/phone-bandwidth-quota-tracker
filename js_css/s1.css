@@ -1,12 +1,14 @@
 body { font-family: monospace }
 input:invalid { background-color: lightsalmon }
-.usage { margin-top: 3ex; }
+/* .usage { margin-top: 3ex; } */
 .settings { margin-top: 3ex; font-family: monospace }
 
-#ausage { width: 6ex; font-size: 130% }
+input.usage { width: 6ex; font-size: 130% }
 #quota  { width: 4.5ex; margin-top: 0.5ex }
 input[type=date] { width: 10em; padding-right: 2em }
 .olderv { margin-top: 3em }
+
+.unmusagep { margin-top: 1ex; }
 
 input { font-size: 150% }
 

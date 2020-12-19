@@ -14,8 +14,12 @@
 	<?php echo $htout_calcs; ?>
     </div>
     <div class=''>
-	<input type='number' id='ausage' step='1' min='0' max=  '<?php echo $htout_umax; ?>' value='<?php echo $htout_au; ?>' /> 
+	<input type='number' id='ausage' step='1' min='0' max=  '<?php echo $htout_umax; ?>' value='<?php echo $htout_au; ?>' class='usage' /> 
 	<label>MB actual usage</label>
+    </div>
+    <div class='unmusagep'>
+	<input type='number' id='unmu' step='1' min='<?php echo $htout_au; ?>' value='<?php echo $htout_unmu;  ?>' class='usage' /> 
+	<label>MB unmetered usage</label>
     </div>
     <div class='settings'>
 	<div><input type='date'   id='turnday' value='<?php echo $htout_ddate; ?>'/>	<label>bill turnover day (any month / year)</label></div>
