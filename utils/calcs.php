@@ -175,7 +175,7 @@ class pquo {
 	
 	$au = $this->getActualUsage($qty);
 	if ($au !== false) {
-	    $this->save($au, $this->isnewau);
+	    if ($qty === 'low') $this->save($au, $this->isnewau, $qty);
 	    $ap = round($au * 100 / $quota);
 	    $apdf = ($quota - $au) / $dintop;
 	    $apd = round($apdf);
