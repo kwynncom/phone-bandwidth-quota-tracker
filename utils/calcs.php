@@ -113,9 +113,11 @@ class pquo {
     }
     
     public function calcs() {
-	$cs = $this->getCalcs();
-	$ht = $this->getCalcsHT($cs);
-	return $ht;
+		
+		
+		$cs = $this->getCalcs();
+		$ht = $this->getCalcsHT($cs);
+		return $ht;
     }
     
     private function getCalcsHT($vin) {
@@ -123,7 +125,7 @@ class pquo {
 	extract($vin);
 	
 	$ht = '';
-	$ht .= self::getTables30($au, $ap, $qad, $ppd, $apd, $perday, $dintop, $dpinp);
+	$ht .= self::getTables15($au, $ap, $qad, $ppd, $apd, $perday);
 	ob_start(); 
 		require_once(__DIR__ . '/../templates/period30.php'); 
 	$ht .= ob_get_clean();
@@ -169,7 +171,7 @@ class pquo {
 
     }
 
-	private static function getTables30($au, $ap, $qad, $ppd, $apd, $perday, $dintop, $dpinp) {
+	private static function getTables15($au, $ap, $qad, $ppd, $apd, $perday) {
 		ob_start();
 		require_once(__DIR__ . '/../templates/usage15.php');
 		return ob_get_clean();
