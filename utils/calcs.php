@@ -124,6 +124,9 @@ class pquo {
 	
 	$ht = '';
 	$ht .= self::getTables30($au, $ap, $qad, $ppd, $apd, $perday, $dintop, $dpinp);
+	ob_start(); 
+		require_once(__DIR__ . '/../templates/period30.php'); 
+	$ht .= ob_get_clean();
 	$ht .= '<p>';
 	$ht .= 'as of ' . date('D, M j g:i A', $now) . "\n";
 	$ht .= '</p>';
@@ -169,7 +172,6 @@ class pquo {
 	private static function getTables30($au, $ap, $qad, $ppd, $apd, $perday, $dintop, $dpinp) {
 		ob_start();
 		require_once(__DIR__ . '/../templates/usage15.php');
-		require_once(__DIR__ . '/../templates/period30.php');
 		return ob_get_clean();
 		
 	}
