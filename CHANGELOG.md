@@ -1,4 +1,10 @@
 CHANGES
+********
+2022/12/23 - I'm only paying partial attention as I try to get both hotspot and total quotas to work.  
+This is probably an example of keeping a bad system alive rather than rewriting.  
+
+
+**********
 
 2020/10/02 11:35pm EDT - 11:47pm
 
