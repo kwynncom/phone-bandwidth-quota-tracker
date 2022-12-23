@@ -123,11 +123,7 @@ class pquo {
 	extract($vin);
 	
 	$ht = '';
-	
-	$ht .= self::getTab1($au, $ap, $qad, $ppd);
-	$ht .= self::getTab2($apd, $perday);
-	$ht .= self::getTab3($dintop, $dpinp);
-
+	$ht .= self::getTables30($au, $ap, $qad, $ppd, $apd, $perday, $dintop, $dpinp);
 	$ht .= '<p>';
 	$ht .= 'as of ' . date('D, M j g:i A', $now) . "\n";
 	$ht .= '</p>';
@@ -169,25 +165,14 @@ class pquo {
 	return $vars;
 
     }
-    
-    private static function getTab2($apd, $perday) { 
-		ob_start();
-		require_once(__DIR__ . '/../templates/usage10.php');
-		return ob_get_clean();
-    }
-    
-    private static function getTab3($dintop, $dpinp) { 
-		ob_start();
-		require_once(__DIR__ . '/../templates/period30.php');	
-		return ob_get_clean();
-    }
-    
-    private static function getTab1($au, $ap, $qad, $ppd) {
-		ob_start();
-		require_once(__DIR__ . '/../templates/usage05.php');
-		return ob_get_clean();
 
-    }
+	private static function getTables30($au, $ap, $qad, $ppd, $apd, $perday, $dintop, $dpinp) {
+		ob_start();
+		require_once(__DIR__ . '/../templates/usage15.php');
+		require_once(__DIR__ . '/../templates/period30.php');
+		return ob_get_clean();
+		
+	}
     
     private function save($au, $isnew) {
 	$dao = new dao_pquo();
