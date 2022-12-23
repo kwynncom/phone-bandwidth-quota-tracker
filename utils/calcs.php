@@ -11,6 +11,9 @@ class pquo {
 	const defaultQuota20 = 35;
     
     public function __construct($turnday = false, $quo = false, $time = false) {
+		
+	$this->isnewau = false; // now using this for both usages
+		
 	$this->turnday = $turnday ? $turnday : $this->getVal('turnday');
 	$this->quo     = $quo     ? $quo     : $this->getVal('quota');
 	$this->quo20   =					   $this->getVal('quota20');
@@ -94,16 +97,17 @@ class pquo {
 
 	public function getQuota20() { return $this->quo20;     }
 	
-    public function getActualUsage() {
+    public function getActualUsage($qty = 'low') {
 	
-	$this->isnewau = false;
+	if ($qty === 'low') $key = 'ausage';
+	else				$key = 'unmu';
 	
-	if (!isset($_REQUEST['ausage'])) {
-	    if (isset($this->dbdat['ausage']) &&
-		      is_numeric($this->dbdat['ausage'])) return $this->dbdat['ausage'];
+	if (!isset($_REQUEST[$key])) {
+	    if (isset($this->dbdat[$key]) &&
+		      is_numeric($this->dbdat[$key])) return $this->dbdat[$key];
 	    return false;
 	} else {
-	    $u =  trim($_REQUEST['ausage']);
+	    $u =  trim($_REQUEST[$key]);
 	    if (!is_numeric($u)) return false;
 	    $this->isnewau = true;
 	    return intval($u);
@@ -113,19 +117,32 @@ class pquo {
     }
     
     public function calcs() {
+				
+		$ht = '';
+		$fs = ['low', 'high'];
+		$i = 0;
 		
+		foreach($fs as $f) { 
+			$cs  = $this->getCalcs($f);
+			$ht .= $this->getCalcsHT($cs, $i++);
+			continue;
+		}
 		
-		$cs = $this->getCalcs();
-		$ht = $this->getCalcsHT($cs);
+		$ht .= $this->getCalcsHT($cs, $i++);
+		
 		return $ht;
     }
     
-    private function getCalcsHT($vin) {
+    private function getCalcsHT($vin, $iter) {
 	
 	extract($vin);
-	
 	$ht = '';
-	$ht .= self::getTables15($au, $ap, $qad, $ppd, $apd, $perday);
+	if ($iter <= 1) {
+		$ht .= self::getTables15($au, $ap, $qad, $ppd, $apd, $perday);
+		$sz = strlen($ht);
+		return $ht;
+	}
+	
 	ob_start(); 
 		require_once(__DIR__ . '/../templates/period30.php'); 
 	$ht .= ob_get_clean();
@@ -136,7 +153,7 @@ class pquo {
 	return $ht;	
     }
     
-    private function getCalcs() {
+    private function getCalcs($qty) {
 	
 	$rres = $this->getRange();
 	$now     = $rres['now'];
@@ -144,7 +161,7 @@ class pquo {
 	$prev    = $rres['pts']; 
 	$eom     = $rres['eom'];
 	unset($rres);
-	$quota   = $this->getQuota() * 1000;
+	$quota   = ($qty === 'low' ? $this->getQuota() : $this->getQuota20()) * 1000;
 	
 	$dintop = ($next - $now) / 86400; unset($next);
 	$dpinp  = ($now - $prev) / 86400;
@@ -156,7 +173,7 @@ class pquo {
 	$qa = $quota - ($quota * $fp); unset($fp);
 	$qad = round($qa); unset($qa);
 	
-	$au = $this->getActualUsage();
+	$au = $this->getActualUsage($qty);
 	if ($au !== false) {
 	    $this->save($au, $this->isnewau);
 	    $ap = round($au * 100 / $quota);
@@ -173,7 +190,7 @@ class pquo {
 
 	private static function getTables15($au, $ap, $qad, $ppd, $apd, $perday) {
 		ob_start();
-		require_once(__DIR__ . '/../templates/usage15.php');
+		require(__DIR__ . '/../templates/usage15.php'); // *** NOT require_ONCE because I'm doing it twice!!!
 		return ob_get_clean();
 		
 	}
