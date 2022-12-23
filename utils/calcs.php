@@ -8,10 +8,12 @@ class pquo {
 
     const defaultTDay  = 7;
     const defaultQuota = 15;
+	const defaultQuota20 = 35;
     
     public function __construct($turnday = false, $quo = false, $time = false) {
 	$this->turnday = $turnday ? $turnday : $this->getVal('turnday');
 	$this->quo     = $quo     ? $quo     : $this->getVal('quota');
+	$this->quo20   =					   $this->getVal('quota20');
 	$this->now     = $time ? $time : time();
 	$this->unmu    = $this->getVal('unmu');
 	return;
@@ -21,8 +23,8 @@ class pquo {
 
 	if (isset($_REQUEST[$pn])) {
 	    $pv = $_REQUEST[$pn];
-	    if ($pn === 'quota') {
-		kwas(is_numeric($pv), 'bad quota value');
+	    if ($pn === 'quota' || $pn === 'quota20') {
+		kwas(is_numeric($pv), 'bad quota(20) value');
 		if ($pv == intval($pv)) return intval($pv);
 		return floatval($pv);
 	    }
@@ -39,17 +41,24 @@ class pquo {
 	
 	if ($this->dbdat) {
 	    if ($pn === 'quota')   return $this->dbdat['quota'];
-	    if ($pn === 'turnday') return $this->dbdat['tday'];
+	    if ($pn === 'quota20')   return $this->getQuota20I();
+		if ($pn === 'turnday') return $this->dbdat['tday'];
 	    if ($pn === 'unmu')    return isset($this->dbdat['unmu']) ? $this->dbdat['unmu'] : '';
 	    kwas(0, 'should not be here in dao getVal()');
 	}
 	
 	if ($pn === 'turnday') return self::defaultTDay;
 	if ($pn === 'quota')   return self::defaultQuota;
+	if ($pn === 'quota20')   return self::defaultQuota20;
 	if ($pn === 'unmu' )   return '';
 	kwas(0, 'should not be here at the end of getVal() dao');
     }
     
+	private function getQuota20I() {
+		$q20 = kwifs($this, 'dbdat', 'quota20');
+		if (!$q20) return self::defaultQuota20;
+		else return $q20;
+	}
     
     public function getRange() {
 	$now = $this->now;
@@ -82,7 +91,9 @@ class pquo {
     public function getUnmu() { return $this->unmu; }
     
     public function getQuota() { return $this->quo;     }
-    
+
+	public function getQuota20() { return $this->quo20;     }
+	
     public function getActualUsage() {
 	
 	$this->isnewau = false;
@@ -160,38 +171,27 @@ class pquo {
     }
     
     private static function getTab2($apd, $perday) { 
-	$ht  = '<table>' . "\n";	
-	$ht .= '<tr><th>MB</th><th></th></tr>' . "\n";
-        $ht .= "<tr><td>$apd</td>   <td class='tdlab'>per day until turnover can be used, on avg., given actual</td></tr>\n";
-	$ht .= "<tr><td>$perday</td><td class='tdlab'>per day can be used assuming linear usage</td></tr>\n\n";	
-	$ht .= '</table>' . "\n";
-	
-	return $ht;
+		ob_start();
+		require_once(__DIR__ . '/../templates/usage10.php');
+		return ob_get_clean();
     }
     
     private static function getTab3($dintop, $dpinp) { 
-	$ht = '<table>' . "\n";	
-	$ht .= '<tr><td>' . round($dintop) . '</td><td class="tdlab">days left in period</td>  <td>' . round($dintop, 5) . '</td></tr>' . "\n";	
-	$ht .= '<tr><td>' . round($dpinp)  . '</td><td class="tdlab">days passed in period</td><td>' . round($dpinp , 5) . '</td></tr>' . "\n";	
-	$ht .= '</table>' . "\n";
-	
-	return $ht;
+		ob_start();
+		require_once(__DIR__ . '/../templates/period30.php');	
+		return ob_get_clean();
     }
     
     private static function getTab1($au, $ap, $qad, $ppd) {
+		ob_start();
+		require_once(__DIR__ . '/../templates/usage05.php');
+		return ob_get_clean();
 
-	$ht = '<table>' . "\n";
-
-	$ht		       .= "<tr><th>MB</th> <th>%</th><th></th></tr>   ";
-	if ($au !== false) $ht .= "<tr><td>$au</td> <td class='peru'>$ap</td><td  class='tdlab'>actual usage</td></tr>\n";
-	$ht .=		          "<tr><td>$qad</td><td class='peru'>$ppd</td><td class='tdlab'>can be used by now assuming linear usage</td></tr>\n";    	
-	$ht .= '</table>' . "\n";
-	return $ht;
     }
     
     private function save($au, $isnew) {
 	$dao = new dao_pquo();
-	$dao->put($au, $this->turnday, $this->quo, $isnew, $this->unmu);
+	$dao->put($au, $this->turnday, $this->quo, $isnew, $this->unmu, $this->quo20);
     }
 }
   

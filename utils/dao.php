@@ -14,10 +14,11 @@ class dao_pquo extends dao_generic {
 	$this->q = ['sid' => $sid];
     }
     
-    public function put($au, $date, $quo, $isnewau, $unmu) {
+    public function put($au, $date, $quo, $isnewau, $unmu, $quo20) {
 	$dat           = $this->q;
 	$dat['tday' ]  = $date;
 	$dat['quota']  = $quo;
+	$dat['quota20']  = $quo20;
 	$dat['ausage'] = $au;
 	$dat['unmu']   = $unmu;
 	$dat['agent']  = self::getua();
@@ -42,7 +43,8 @@ class dao_pquo extends dao_generic {
 	return 'unk';
     }
     
-    public function get() { return $this->rcoll->findOne($this->q);  }
+    public function get() { 
+		return $this->rcoll->findOne($this->q);  }
 }
 
 

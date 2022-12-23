@@ -23,8 +23,15 @@
     </div>
     <div class='settings'>
 	<div><input type='date'   id='turnday' value='<?php echo $htout_ddate; ?>'/>	<label>bill turnover day (any month / year)</label></div>
-	<div><input type='number' id='quota'   value='<?php echo $htout_dquo;  ?>' step='1' min='1' max='99'  />
-	    <label>GB / month quota</label> <!-- the min above is one way to avoid divide by zero, although it's only client-side and not secure -->
+	<div>
+		<div>
+		<input type='number' id='quota' class='quota'   value='<?php echo $htout_dquo;  ?>' step='1' min='1' max='99'  />
+	    <label>GB / month quota (lower / hotspot)</label> <!-- the min above is one way to avoid divide by zero, although it's only client-side and not secure -->
+		</div>
+		<div>
+		<input type='number' id='quota20' class='quota'  value='<?php echo $htout_dquo20;  ?>' step='1' min='1' max='99'  />
+	    <label>GB / month quota (higher / total bandwidth)</label> <!-- the min above is one way to avoid divide by zero, although it's only client-side and not secure -->
+		</div>
 	</div>
     </div>
 </body>

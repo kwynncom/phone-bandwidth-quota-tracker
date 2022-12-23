@@ -3,7 +3,7 @@ input:invalid { background-color: lightsalmon }
 .settings { margin-top: 3ex; font-family: monospace }
 
 input.usage { width: 7ex; font-size: 130%; text-align: right; }
-#quota  { width: 4.5ex; margin-top: 0.5ex }
+.quota  { width: 4.5ex; margin-top: 0.5ex }
 input[type=date] { width: 10em; padding-right: 2em }
 .olderv { margin-top: 3em }
 

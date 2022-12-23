@@ -18,6 +18,7 @@ function getHTOutputVars() {
     $pqo = new pquo();
     $ddate = $pqo->getNextTS();
     $dquo  = $pqo->getQuota();
+	$dquo20 = $pqo->getQuota20();
     $au    = $pqo->getActualUsage();
     $unmu  = $pqo->getUnmu();
     if (!$au) $au = '';
