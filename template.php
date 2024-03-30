@@ -7,20 +7,24 @@
     <title>phone quota</title>
 
     <link   href='js_css/s1.css'   rel='stylesheet' type='text/css'>
+<?php if (KWPQUOISRUNNING) { ?>
     <script src ='js_css/js1.js'></script>
+<?php } ?>
 </head>
 <body>
+
+    <p>As of March 29, 2024, I'm turning this off.  
+
+</p>
+
     <div id='calcs'>
-	<?php echo $htout_calcs; ?>
+	<?php if (KWPQUOISRUNNING) echo $htout_calcs; ?>
     </div>
     <div class=''>
 	<input type='number' id='ausage' step='1' min='0' max=  '<?php echo $htout_umax; ?>' value='<?php echo $htout_au; ?>' class='usage' /> 
 	<label>MB actual usage</label>
     </div>
     <div class='unmusagep'>
-		<?php
-			kwynn();
-		?>
 	<input type='number' id='unmu' step='1' min='<?php echo $htout_au; ?>' value='<?php echo $htout_unmu;  ?>' class='usage' /> 
 	<label>MB unmetered usage</label>
     </div>

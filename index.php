@@ -1,5 +1,7 @@
 <?php
+define('KWPQUOISRUNNING', false);
 
+if (KWPQUOISRUNNING) {
 require_once('utils/calcs.php');
 
 doAJAX();
@@ -37,3 +39,5 @@ function doInitDisplay($vin) {
     unset($r);
     require_once('template.php');
 }
+} // if running
+else  require_once('template.php');
